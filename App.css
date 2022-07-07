@@ -1,0 +1,115 @@
+body {
+  font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
+  background: #faf8ef;
+  color: #776e65;
+  font-size: 18px;
+}
+
+h3 {
+  text-align: center;
+  font-weight: bold;
+}
+
+p {
+  text-align: center;
+}
+
+table {
+  margin: 10px auto;
+  border: 10px solid;
+  color: #776e65;
+  box-sizing: border-box;
+}
+
+.button {
+  background-color: #8f7a66;
+  color: #f9f6f2;
+  height: 50px;
+  width: 150px;
+  border-radius: 5px;
+  margin: 50px auto;
+  padding: 20px;
+  font-weight: bold;
+  text-align: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.tile {
+  height: 100px;
+  width: 100px;
+  background-color: rgb(204, 192, 179);
+  border: 2px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.tile-value {
+  font-size: 55px;
+  font-weight: bold;
+}
+
+.score {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+
+.color-2 {
+  background-color: rgb(238, 228, 218);
+  color: rgb(119, 110, 101);
+}
+
+.color-4 {
+  background-color: rgb(237, 224, 200);
+  color: rgb(119, 110, 101);
+}
+
+.color-8 {
+  background-color: rgb(242, 177, 121);
+  color: rgb(249, 246, 242); 
+}
+
+.color-16 {
+  background-color: rgb(245, 149, 99);
+  color: rgb(249, 246, 242); 
+}
+
+.color-32 {
+  background-color: rgb(246, 124, 95);
+  color: rgb(249, 246, 242);
+}
+
+.color-64 {
+  background-color: rgb(246, 94, 59);
+  color: rgb(249, 246, 242);
+}
+
+.color-128 {
+  background-color: rgb(237, 207, 114);
+  color: rgb(249, 246, 242);
+}
+
+.color-256 {
+  background-color: rgb(237, 204, 97);
+  color: rgb(249, 246, 242);
+}
+
+.color-512 {
+  background-color: rgb(237, 200, 80);
+  color: rgb(249, 246, 242);
+}
+
+.color-1024 {
+  background-color: rgb(237, 197, 63);
+  color: rgb(249, 246, 242);
+}
+
+.color-2048 {
+  background-color: rgb(237, 194, 46);
+  color: rgb(249, 246, 242);
+}
