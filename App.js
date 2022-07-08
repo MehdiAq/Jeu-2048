@@ -13,7 +13,7 @@ class App extends React.Component {
   initializeBoard = (n) => {
     let board = new Array(n).fill(0).map(() => new Array(n).fill(0));
     board = this.initializeEmptyTile(this.initializeEmptyTile(board));
-    this.setState({ board, score: 0, gameOver: false, message: null });
+    this.setState({ board: board, score: 0, gameOver: false, message: null });
   };
 
   initializeEmptyTile = (board) => {
@@ -56,18 +56,18 @@ class App extends React.Component {
     return board;
   };
 
-  reverse = (board) => {
-    const reversedBoard = new Array(board.length)
+  mirror = (board) => {
+    const mirroredBoard = new Array(board.length)
       .fill(0)
       .map(() => new Array(board.length).fill(0));
 
     for (let r = 0; r < board.length; r++) {
       for (let c = 0; c < board[r].length; c++) {
-        reversedBoard[r][c] = board[r][board[r].length - 1 - c];
+        mirroredBoard[r][c] = board[r][board[r].length - 1 - c];
       }
     }
 
-    return reversedBoard;
+    return mirroredBoard;
   };
 
   rotateLeft = (board) => {
@@ -99,132 +99,129 @@ class App extends React.Component {
   };
 
   compressLeft = (board) => {
-    const movedLeftBoard = this.compact(this.merge(this.compact(board)));
-    if (JSON.stringify(movedLeftBoard) === JSON.stringify(board)) {
-      return board;
-    }
-    this.initializeEmptyTile(movedLeftBoard);
-    this.setState({
-      board: movedLeftBoard,
-      score: this.state.score + 1,
-    });
-    return movedLeftBoard;
+    return this.compact(this.merge(this.compact(board)));
   };
 
   compressRight = (board) => {
-    const movedRightBoard = this.reverse(
-      this.compact(this.merge(this.compact(this.reverse(board))))
+    return this.mirror(
+      this.compact(this.merge(this.compact(this.mirror(board))))
     );
-    if (JSON.stringify(movedRightBoard) === JSON.stringify(board)) {
-      return board;
-    }
-    this.initializeEmptyTile(movedRightBoard);
-    this.setState({
-      board: movedRightBoard,
-      score: this.state.score + 1,
-    });
-    return movedRightBoard;
   };
 
   compressUp = (board) => {
-    const movedUpBoard = this.rotateRight(
+    return this.rotateRight(
       this.compact(this.merge(this.compact(this.rotateLeft(board))))
     );
-    if (JSON.stringify(movedUpBoard) === JSON.stringify(board)) {
-      return board;
-    }
-    this.initializeEmptyTile(movedUpBoard);
-    this.setState({
-      board: movedUpBoard,
-      score: this.state.score + 1,
-    });
-    return movedUpBoard;
   };
 
   compressDown = (board) => {
-    const movedDownBoard = this.rotateLeft(
+    return this.rotateLeft(
       this.compact(this.merge(this.compact(this.rotateRight(board))))
     );
-    if (JSON.stringify(movedDownBoard) === JSON.stringify(board)) {
-      return board;
-    }
-    this.initializeEmptyTile(movedDownBoard);
-    this.setState({
-      board: movedDownBoard,
-      score: this.state.score + 1,
-    });
-    return movedDownBoard;
   };
 
-  componentWillMount() {
+  componentWillMount = () => {
     this.initializeBoard(4);
-    window.addEventListener("keydown", this.handleKeyDown.bind(this));
-  }
-
-  hasValue = (board, value) => {
-    return board.some((row) => row.includes(value));
+    document.addEventListener("keydown", this.handleKeyDown.bind(this));
   };
 
-  isFull = (board) => {
-    return !board.some((row) => row.includes(0));
-  };
-
-  isGameOver = (board) => {
-    if (this.hasValue(board, 2048)) {
+  checkIfGameIsOver = (board) => {
+    if (this.state.gameOver) {
+      alert("La partie est finie. Cliquez sur 'Recommencer' pour rejouer");
+      return;
+    }
+    // On déclare la partie gagnée si le joueur a atteint 2048
+    if (board.some((row) => row.includes(2048))) {
+      this.setState({
+        board: board,
+        score: this.state.score + 1,
+        gameOver: true,
+        message: "Cliquez sur 'Recommencer' pour rejouer",
+      });
       alert("2048 atteint !!! Vous avez gagné !!!");
-      this.setState({
-        gameOver: true,
-        message: "Cliquez sur 'Commencer' pour rejouer",
-      });
-      return true;
+      return;
     }
-    if (this.isFull(board)) {
+    // On déclare la partie terminée s'il n'y a plus aucun mouvement
+    // possible permettant de fusionner des tuiles, sinon on laisse
+    // au joueur la possibilité d'essayer les différents mouvements
+    if (
+      JSON.stringify(board) === JSON.stringify(this.compressUp(board)) &&
+      JSON.stringify(board) === JSON.stringify(this.compressDown(board)) &&
+      JSON.stringify(board) === JSON.stringify(this.compressLeft(board)) &&
+      JSON.stringify(board) === JSON.stringify(this.compressRight(board))
+    ) {
+      this.setState({
+        board: board,
+        score: this.state.score + 1,
+        gameOver: true,
+        message: "Cliquez sur 'Recommencer' pour rejouer",
+      });
       alert("Perdu! Vous pouvez réessayer!");
-      this.setState({
-        gameOver: true,
-        message: "Cliquez sur 'Commencer' pour rejouer",
-      });
-      return true;
+      return;
     }
-    return false;
+    // Mettre à jour le score et le tableau s'il a été changé et que la partie
+    // n'est pas finie
+    if (JSON.stringify(board) !== JSON.stringify(this.state.board)) {
+      this.initializeEmptyTile(board);
+      this.setState({
+        board: board,
+        score: this.state.score + 1,
+      });
+    }
   };
 
   handleKeyDown(e) {
-    if (this.state.gameOver) {
-      alert("Cliquez sur 'Commencer' pour rejouer");
-      return;
+    let board;
+    switch (e.key) {
+      case "ArrowUp":
+        e.preventDefault();
+        board = this.compressUp(this.state.board);
+        break;
+      case "ArrowDown":
+        e.preventDefault();
+        board = this.compressDown(this.state.board);
+        break;
+      case "ArrowLeft":
+        e.preventDefault();
+        board = this.compressLeft(this.state.board);
+        break;
+      case "ArrowRight":
+        e.preventDefault();
+        board = this.compressRight(this.state.board);
+        break;
+      default:
+        return;
     }
-    if (!this.isGameOver(this.state.board)) {
-      switch (e.key) {
-        case "ArrowUp":
-          this.compressUp(this.state.board);
-          break;
-        case "ArrowDown":
-          this.compressDown(this.state.board);
-          break;
-        case "ArrowLeft":
-          this.compressLeft(this.state.board);
-          break;
-        case "ArrowRight":
-          this.compressRight(this.state.board);
-          break;
-        default:
-          break;
-      }
-    }
+    this.checkIfGameIsOver(board);
   }
 
   render() {
     return (
       <div>
-        <div
-          className="button"
-          onClick={() => {
-            this.initializeBoard(4);
+        <div class="button">
+          <a href="index.html">Revenir</a>
+        </div>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            this.initializeBoard(
+              parseInt(document.getElementById("boardSize").value)
+            );
           }}
         >
-          Commencer
-        </div>
+          {/* J'ai limité la grandeur du tableau à 15 pour que le tableau fit dans une
+          page sans avoir à scroller */}
+          <label for="boardSize">Entrez la taille du tableau</label>
+          <input
+            type="number"
+            id="boardSize"
+            min="2"
+            max="15"
+            placeholder="Entre 2 et 15"
+            required
+          />
+          <input type="submit" class="button" value="Recommencer" />
+        </form>
 
         <h3>Score: {this.state.score}</h3>
 
@@ -235,6 +232,8 @@ class App extends React.Component {
         </table>
 
         <p>{this.state.message}</p>
+
+        <Instructions />
       </div>
     );
   }
@@ -263,6 +262,21 @@ const Cell = ({ cellValue }) => {
         <div className="tile-value">{value}</div>
       </div>
     </td>
+  );
+};
+
+const Instructions = () => {
+  return (
+    <div id="instructions">
+      <p>
+        <strong>Instructions:</strong> Utiliser les touches directionnelles du{" "}
+        <strong>clavier</strong> pour bouger les tuiles: Droite, Gauche, Haut,
+        Bas. Les tuiles voisines avec les même valeurs vont fusionner. Continuez
+        jusqu'à atteindre <strong>2048!</strong> La partie termine si le tableau
+        est plein et qu'il n'existe plus de mouvement pouvant fusionner des
+        tuiles.
+      </p>
+    </div>
   );
 };
 
