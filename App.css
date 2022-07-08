@@ -1,17 +1,33 @@
 body {
   font-family: "Clear Sans", "Helvetica Neue", Arial, sans-serif;
-  background: #faf8ef;
+  background-color: rgba(204, 192, 179, 0.747);
   color: #776e65;
   font-size: 18px;
 }
 
-h3 {
+img {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 200px;
+  height: 200px;
+}
+
+h3,
+label {
   text-align: center;
   font-weight: bold;
 }
 
 p {
   text-align: center;
+}
+
+#instructions p {
+  border: 3px solid #776e65;
+  width: 50%;
+  margin: 50px auto;
+  padding: 10px;
 }
 
 table {
@@ -21,21 +37,37 @@ table {
   box-sizing: border-box;
 }
 
-.button {
+form {
+  margin: 50px auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.button,
+a {
   background-color: #8f7a66;
   color: #f9f6f2;
   height: 50px;
   width: 150px;
+  margin-top: 20px;
   border-radius: 5px;
-  margin: 50px auto;
-  padding: 20px;
   font-weight: bold;
-  text-align: center;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
   cursor: pointer;
+  text-align: center;
+  padding-top: 10px;
+  text-decoration: none;
+}
+
+input.button:hover,
+a:hover {
+  color: lightgrey;
+}
+
+input.button {
+  padding-top: 0px;
 }
 
 .tile {
@@ -49,7 +81,7 @@ table {
 }
 
 .tile-value {
-  font-size: 55px;
+  font-size: 45px;
   font-weight: bold;
 }
 
@@ -57,7 +89,6 @@ table {
   text-align: center;
   margin-bottom: 20px;
 }
-
 
 .color-2 {
   background-color: rgb(238, 228, 218);
@@ -71,12 +102,12 @@ table {
 
 .color-8 {
   background-color: rgb(242, 177, 121);
-  color: rgb(249, 246, 242); 
+  color: rgb(249, 246, 242);
 }
 
 .color-16 {
   background-color: rgb(245, 149, 99);
-  color: rgb(249, 246, 242); 
+  color: rgb(249, 246, 242);
 }
 
 .color-32 {
