@@ -1,39 +1,126 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="initial-scale=1, width=device-width" />
-    <title>Jeu 2048</title>
-    <!-- Charger React -->
-    <script
-      src="https://unpkg.com/react@18/umd/react.production.min.js"
-      crossorigin
-    ></script>
-    <script
-      src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"
-      crossorigin
-    ></script>
-    <!-- Charger bootstrap -->
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2"
-      crossorigin="anonymous"
-    ></script>
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
-      crossorigin="anonymous"
-    />
-    <!-- Charger Babel -->
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-
-    <!-- Charger le component React -->
-    <script type="text/babel" src="App.js"></script>
-    <!-- Charger la feuille de style -->
-    <link rel="stylesheet" href="App.css" />  
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Mehdi Aqdim" />
+    <meta name="description" content="IFT3225 TP2" />
+    <link rel="icon" type="image/x-icon" href="favicon.png" />
+    <title>IFT3225: TP2</title>
+    <link rel="stylesheet" href="index.css" />
   </head>
   <body>
-    <div id="root" class="container"></div>
+    <a href="2048.html"><img src="favicon.png" alt="2048 logo" /></a>
+    <h1>TP2: Jeu 2048</h1>
+
+    <article>
+      <h2>Choix de présentation</h2>
+      <p>
+        J'ai fait le choix d'utiliser <em>React</em> avec un Class component
+        "App.js", contenant tous les éléments HTML et les custom components
+        nécessaires au jeu, avec des attributs "State" qui garde l'état du
+        tableau (board), du score (score), si le jeu est terminé ou pas
+        (gameOver) et un message qui s'affichera quand la partie sera terminée
+        (message). Le choix de <em>React</em> implique l'utilisation de
+        <em>JSX</em> pour manipuler les différents components et le passage de
+        <em>props</em>.<br />
+        Concernant l'implémentation de la logique du jeu, on commence par
+        initialiser le tableau par la taille choisie (sauf au chargement de la
+        page où le tableau est initialisé avec une taille de 4 par défaut),
+        ensuite on initialise aléatoirement 2 tuiles avec la valeur 2 ou 4. Pour
+        les différents mouvements possibles, j'ai commencé par implanter le
+        mouvement à gauche avec 2 fonctions auxiliaires, qu'on va réutiliser
+        dans tous les autres mouvements. La première est <em>compact()</em> qui
+        sert à compacter les différentes tuiles non nulles vers la gauche. La
+        deuxième est <em>merge()</em> qui fusionne les tuiles voisines ayant la
+        même valeur en commençant par la gauche.<br />
+        Le mouvement à gauche donc, implanté par la fonction
+        <em>compressLeft()</em> consiste à appeler la fonction
+        <em>compact()</em> + <em>merge()</em> + <em>compact()</em> sur le
+        tableau.<br />
+        Afin de mieux structurer le code, les autres mouvements utilisent
+        <em>compressLeft()</em> en plus d'autres fonctions auxiliaires, ce qui
+        permet de réutiliser les fonctions déjà implantées et de minimiser les
+        lignes de code. Pour le mouvement à droite j'ai donc implanter une
+        fonction <em>mirror()</em> qui applique un effet mirroir sur le tableau
+        avant d'appeler la fonction <em>compressLeft()</em> pour compresser le
+        tableau et de réappliquer l'effet mirroir pour mimer le mouvement à
+        droite.<br />
+        Pour les mouvements vers le haut et le bas, j'ai eu besoin d'implanter
+        deux nouvelles fonctions <em>rotateRight()</em> et
+        <em>rotateLeft()</em> qui appliquent une rotation sur le tableau vers la
+        droite ou vers la gauche. Ensuite, j'appelle
+        <em>compressLeft()</em> avant de réappliquer une rotation inverse afin
+        de remettre le tableau dans l'état initial. Cette approche mime les
+        déplacements vers le heut et la droite.<br />
+        Pour finir, j'appelle la fonction <em>checkIfGameIsOver()</em> après
+        chaque mouvement afin de vérifier si le jouer a gagné (càd qu'il a
+        atteint 2048) où s'il a perdu (càd que le tableau est plein et qu'il
+        n'existe plus de mouvement possible qui permet de fusionner des
+        tuiles).<br />
+        Une fois le jeu terminé, le joueur a l'option de recommencer le jeu en
+        entrant la grandeur du tableau désirée et en appuyant sur le bouton
+        <em>Recommencer</em>.
+      </p>
+    </article>
+    <br />
+    <article>
+      <h2>Connaissances accumulées</h2>
+      <p>
+        Ce TP m'a permis de me familiariser avec des concepts importants de
+        <em>React</em> tel que:
+      </p>
+      <ul>
+        <li>
+          La manipulation de l'état d'un component avec différents attributs qui
+          rafraichissent le component en question chaque fois qu'un attribut
+          <em>State</em>
+          change de valeur.
+        </li>
+        <li>
+          Le passage de <em>props</em> au components enfants par le component
+          parent afin de modifier leur contenu ou leur style comme c'est le cas
+          dans mon implantaion des rangées et des tuiles du tableau.
+        </li>
+        <li>
+          L'implantation des fonctions comme <em>componentWillMount()</em> ou
+          <em>componentWillUnmount()</em>, entre autres, qui permettent de
+          rouler du code lors du mounting ou unmounting d'un component. Par
+          exemple, dans notre cas, on initialise le tableau avec une taille de 4
+          par défaut et on lie un EventListener à l'objet <em>Window</em> lors
+          du mounting de notre component principal "App".
+        </li>
+        <li>
+          L'utilisation de <em>JSX</em> et sa syntaxe afin de manipuler les
+          components en se basant sur une approche de programmation dynamique.
+        </li>
+        <li>
+          La manipulation des formulaires HTML avec Javascript afin de modifier
+          le contenu d'une page web dépendemment des valeurs entrées en input.
+        </li>
+        <li>
+          Le fonctionnement de <em>React</em> et son approche
+          <em>component-based</em> que ce soit en forme de classe ou de
+          fonction, qui permet d'avoir un DOM virtuel qui rafraîchit uniquement
+          les components qui ont changés d'état, ce qui permet d'améliorer et
+          d'optimiser la performance.
+        </li>
+        <li>
+          La manipulation de tableaux avec <em>JavaScript</em> grâce à la grande
+          variété des fonctions prédifinies qui permettent d'appliquer
+          différentes opérations dessus.
+        </li>
+      </ul>
+    </article>
+    <br />
+    <article>
+      <h2>Liens</h2>
+      <ul>
+        <li><a href="2048.html">HTML: Page du jeu 2048</a></li>
+        <li><a href="App.css">CSS</a></li>
+        <li><a href="App.js">JavaScript</a></li>
+      </ul>
+    </article>
   </body>
 </html>
