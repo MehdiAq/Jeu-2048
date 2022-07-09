@@ -269,7 +269,7 @@ const Instructions = () => {
   return (
     <div id="instructions">
       <p>
-        <strong>Instructions:</strong> Utiliser les touches directionnelles du{" "}
+        <strong><u>Instructions:</u></strong> Utiliser les touches directionnelles du{" "}
         <strong>clavier</strong> pour bouger les tuiles: Droite, Gauche, Haut,
         Bas. Les tuiles voisines avec les même valeurs vont fusionner. Continuez
         jusqu'à atteindre <strong>2048!</strong> La partie termine si le tableau
